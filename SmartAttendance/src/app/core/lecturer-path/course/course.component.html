@@ -1,0 +1,64 @@
+<app-header></app-header>
+<div class="flex flex-col py-2">
+    <div class="flex justify-center text-center py-2 mb-2">
+        <section class="example-container mat-elevation-z8" tabindex="0">
+            <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+                <!-- Student ID Column -->
+                <ng-container matColumnDef="student_id">
+                    <th mat-header-cell *matHeaderCellDef> Student ID </th>
+                    <td mat-cell *matCellDef="let element"> {{element.student_id}} </td>
+                </ng-container>
+
+                <!-- Student Name Column -->
+                <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef> Student Name </th>
+                    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                </ng-container>
+
+                <!-- Attendance Status Columns for each date -->
+                <ng-container matColumnDef="12/5">
+                    <th mat-header-cell *matHeaderCellDef> 12/5 Status </th>
+                    <td mat-cell *matCellDef="let element"> {{element['12/5'] || 'N/A'}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="14/5">
+                    <th mat-header-cell *matHeaderCellDef> 14/5 Status </th>
+                    <td mat-cell *matCellDef="let element"> {{element['14/5'] || 'N/A'}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="16/5">
+                    <th mat-header-cell *matHeaderCellDef> 16/5 Status </th>
+                    <td mat-cell *matCellDef="let element"> {{element['16/5'] || 'N/A'}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="18/5">
+                    <th mat-header-cell *matHeaderCellDef> 18/5 Status </th>
+                    <td mat-cell *matCellDef="let element"> {{element['18/5'] || 'N/A'}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="20/5">
+                    <th mat-header-cell *matHeaderCellDef> 20/5 Status </th>
+                    <td mat-cell *matCellDef="let element"> {{element['20/5'] || 'N/A'}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="22/5">
+                    <th mat-header-cell *matHeaderCellDef> 22/5 Status </th>
+                    <td mat-cell *matCellDef="let element"> {{element['22/5'] || 'N/A'}} </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+        </section>
+    </div>
+    <div class="flex justify-between p-1">
+        <button type="button" (click)="generateQrCodePage()" class="border-2 border-blue-300 bg-blue-300 text-white py-1 w-full rounded-md hover:bg-transparent hover:text-indigo-700 font-semibold">
+            <i class="fa-solid fa-qrcode"></i> Generate QR code
+        </button>
+        <button type="button" (click)="sendWarning()" class="border-2 ml-1 border-blue-300 bg-blue-300 text-white py-1 w-full rounded-md hover:bg-transparent hover:text-indigo-700 font-semibold">
+            <i class="fa-solid fa-file-lines"></i> Send Warning
+        </button>
+    </div>
+</div>
+<app-footer></app-footer>
