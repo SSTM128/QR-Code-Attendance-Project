@@ -18,7 +18,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
 import {MatNativeDateModule, MatOption} from "@angular/material/core";
 import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from "@angular/material/datepicker";
-import {RouterOutlet} from "@angular/router";
+import {RouterModule, RouterOutlet} from "@angular/router";
 import {MatInputModule} from "@angular/material/input";
 import {MatButton} from "@angular/material/button";
 import {MatSidenavModule} from "@angular/material/sidenav";
@@ -29,6 +29,8 @@ import {MatProgressSpinner} from "@angular/material/progress-spinner";
 import {MatSort, MatSortHeader} from "@angular/material/sort";
 import {MatIcon} from "@angular/material/icon";
 import { CourseComponent } from './core/lecturer-path/course/course.component';
+import { BannerComponent } from './Helpers/banner/banner.component';
+import { NotificationsComponent } from './core/notifications/notifications.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +44,9 @@ import { CourseComponent } from './core/lecturer-path/course/course.component';
     WarningPageComponent,
     QrGenerationPageComponent,
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
+    BannerComponent,
+    NotificationsComponent,
 
   ],
   imports: [
@@ -66,7 +70,8 @@ import { CourseComponent } from './core/lecturer-path/course/course.component';
     MatSort,
     MatSortHeader,
     MatPaginator,
-    MatIcon
+    MatIcon,
+    RouterModule
 
   ],
   providers: [

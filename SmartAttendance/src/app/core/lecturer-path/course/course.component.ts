@@ -22,10 +22,23 @@ export class CourseComponent implements OnInit {
   displayedColumns: string[] = ['student_id', 'name', '12/5', '14/5', '16/5', '18/5', '20/5', '22/5'];
   dataSource: any[] = [];
 
+  id :string = ''
+  section = 0
+
   constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.fetchAttendanceRecords();
+
+    const idParam = this.route.snapshot.paramMap.get('id');
+    const sectionParam = this.route.snapshot.paramMap.get('section');
+
+    if (idParam !== null && sectionParam !== null) {
+      this.id = idParam;
+      this.section = +sectionParam;
+    } else {
+      console.error('Invalid route parameters');
+    }
   }
 
   fetchAttendanceRecords(): void {

@@ -1,0 +1,33 @@
+<app-header></app-header>
+<app-banner></app-banner>
+<div class="flex-col justify-center center-items w-2/4 mx-auto" >
+  <div class=" w-full mt-3 p-6 shadow-lg bg-white rounded-md"
+       *ngFor="let notification of notifications">
+    <h1 class="text-xl block text-center font-semibold bg-blue-300 p-1 rounded-md">
+      Excuse
+    </h1>
+    <hr class="mt-5">
+    <div class="flex-col justify-evenly text-center items-center p-2 text-xl font-base">
+      <p>Name: {{ notification.recipientName }} </p>
+      <p>ID: {{ notification.recipientId}}</p>
+    </div>
+    <hr class="mt-3">
+    <div class="mt-3 text-center">
+      <h3 class="text-xl block font-base">
+        {{ notification.message }}
+      </h3>
+    </div>
+    <hr class="mt-3">
+    <div class="mt-3 text-center">
+      <h3 class="text-xl block font-base">
+        {{ notification.dateSent }}
+      </h3>
+    </div>
+    <div class="flex justify-evenly mt-5 gap-2">
+      <button type="button" class="border-2 border-red-400 bg-red-600 text-white py-1 w-1/4 rounded-md font-semibold" ><i class="fa-solid fa-right-to-bracket"></i> Deny</button>
+      <button type="button" class="border-2 border-green-400 bg-green-500 text-white py-1 w-1/4 rounded-md font-semibold" ><i class="fa-solid fa-right-to-bracket"></i> Accept</button>
+    </div>
+
+  </div>
+</div>
+<app-footer></app-footer>
