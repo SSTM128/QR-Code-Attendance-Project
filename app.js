@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const attendanceRoutes = require('./routes/attendanceRoutes');
+const loginRoute = require('./routes/login'); // Import login route
 
 const app = express();
 
@@ -20,6 +21,7 @@ mongoose.connect(dbURI, {
 
 // Routes
 app.use('/attendances', attendanceRoutes);
+app.use('/api', loginRoute); // Add login route
 
 app.get('/', (req, res) => {
     res.send('Welcome to the Attendance System');
