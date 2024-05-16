@@ -1,8 +1,10 @@
+// src/app/log-in/log-in.component.ts
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
-import { Router } from "@angular/router";
-import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { IUserCredentials } from "../../User.module"; // Ensure this path is correct
+import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import {UserService} from "../../user.service";
+import {IUserCredentials} from "../../User.module";
 
 @Component({
   selector: 'app-log-in',
@@ -15,22 +17,33 @@ export class LogInComponent implements OnInit {
     password: new FormControl('', Validators.required),
   });
 
-  credentials: IUserCredentials = { id: '', password: '' };
+  credentials:IUserCredentials  = { id: '', password: '' };
 
-  ngOnInit() { }
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private userService: UserService // Inject UserService
+  ) {}
 
-  constructor(private http: HttpClient, private router: Router) { }
+  ngOnInit() {}
 
   logIn() {
     this.credentials.id = this.logInForm.get('id')?.value || '';
     this.credentials.password = this.logInForm.get('password')?.value || '';
 
-    this.http.post<{ role: string }>('http://localhost:3000/api/login', this.credentials).subscribe(
+    this.http.post<{ role : string , name : string , email : string }>('http://localhost:3000/api/login', this.credentials).subscribe(
       response => {
-        if (response.role === 'lecturer') {
-          this.router.navigate(['lecturer-dashboard']);
-        } else if (response.role === 'student') {
-          this.router.navigate(['student-dashboard']);
+        if (response.role) {
+          this.credentials.role = response.role;
+          this.credentials.name = response.name;
+          this.credentials.email = response.email;
+          this.userService.setUser(this.credentials); // Store user data in sessionStorage
+
+          if (response.role === 'lecturer') {
+            this.router.navigate(['lecturer-dashboard']);
+          } else if (response.role === 'student') {
+            this.router.navigate(['student-dashboard']);
+          }
         } else {
           alert('Invalid credentials');
         }

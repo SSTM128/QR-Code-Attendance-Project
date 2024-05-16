@@ -20,6 +20,6 @@ constructor(private router: Router) {
 }
 
   SendWarning() {
-    this.router.navigate(['course']);
+    this.router.navigate(['lecturer-dashboard/course/:id/:section']);
   }
 }
