@@ -1,43 +1,27 @@
-import { BehaviorSubject, Observable } from 'rxjs';
+// src/app/user.service.ts
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { map, catchError } from 'rxjs/operators';
-import {IUser, IUserCredentials} from "./User.module";
-
+import {IUserCredentials} from "./User.module";
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  private currentUserSubject: BehaviorSubject<IUser | null>;
-  public currentUser: Observable<IUser | null>;
+  private storageKey = 'userCredentials';
 
-  constructor(private http: HttpClient) {
-    this.currentUserSubject = new BehaviorSubject<IUser | null>(null);
-    this.currentUser = this.currentUserSubject.asObservable();
+  setUser(user: IUserCredentials) {
+    sessionStorage.setItem(this.storageKey, JSON.stringify(user));
   }
 
-  public login(credentials: IUserCredentials): Observable<IUser> {
-    return this.http.post<IUser>('/api/login', credentials).pipe(
-      map(user => {
-        this.currentUserSubject.next(user); // Update the observable with the new user data
-        return user;
-      }),
-      catchError(error => {
-        console.error('Login failed:', error);
-        this.currentUserSubject.next(null); // Clear user data on error
-        throw error;
-      })
-    );
+  getUser(): IUserCredentials | null {
+    const userJson = sessionStorage.getItem(this.storageKey);
+    if (userJson) {
+      return JSON.parse(userJson) as IUserCredentials;
+    }
+    return null;
   }
 
-  logout(): void {
-    this.currentUserSubject.next(null); // Clear the user data and update the observable
+  clearUser() {
+    sessionStorage.removeItem(this.storageKey);
   }
-
-  getUserInfo(): IUser | null {
-    return this.currentUserSubject.value;
-  }
-
 }
