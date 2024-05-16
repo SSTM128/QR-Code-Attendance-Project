@@ -1,48 +1,44 @@
-import {Component, OnInit} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {Router} from "@angular/router";
-import {IUserCredentials} from "../../User.module";
-import {UserService} from "../../user.service";
-import {FormGroup, FormControl, ReactiveFormsModule, Validators} from "@angular/forms";
-
+import { Component, OnInit } from '@angular/core';
+import { HttpClient } from "@angular/common/http";
+import { Router } from "@angular/router";
+import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { IUserCredentials } from "../../User.module"; // Ensure this path is correct
 
 @Component({
   selector: 'app-log-in',
   templateUrl: './log-in.component.html',
-  styleUrl: './log-in.component.css'
+  styleUrls: ['./log-in.component.css']
 })
-export class LogInComponent implements OnInit{
-  logInForm= new FormGroup({
-    id: new FormControl('' , Validators.required),
-    password: new FormControl('' , Validators.required),
-
+export class LogInComponent implements OnInit {
+  logInForm = new FormGroup({
+    id: new FormControl('', Validators.required),
+    password: new FormControl('', Validators.required),
   });
 
-  credentials:IUserCredentials = {id : '' , password : ''};
-  ngOnInit() {
-  }
+  credentials: IUserCredentials = { id: '', password: '' };
 
-  constructor(private UserService: UserService,
-              private http: HttpClient,
-              private router: Router
-  ) {
+  ngOnInit() { }
 
-  }
+  constructor(private http: HttpClient, private router: Router) { }
 
   logIn() {
-    this.router.navigate(['lecturer-dashboard']);
-    // this.UserService.login(this.credentials).subscribe(
-      // {next: (user) => {
-      //     if (user.role === 'student') {
-      //       this.router.navigate(['/student']);
-      //     } else if (user.role === 'lecturer') {
-      //       this.router.navigate(['/lecturer']);
-      //     }
-      //   },
-      //   error: (error) => {
-      //     console.error('Login error:', error);
-      //   }
-      // }
-    // )
+    this.credentials.id = this.logInForm.get('id')?.value || '';
+    this.credentials.password = this.logInForm.get('password')?.value || '';
+
+    this.http.post<{ role: string }>('http://localhost:3000/api/login', this.credentials).subscribe(
+      response => {
+        if (response.role === 'lecturer') {
+          this.router.navigate(['lecturer-dashboard']);
+        } else if (response.role === 'student') {
+          this.router.navigate(['student-dashboard']);
+        } else {
+          alert('Invalid credentials');
+        }
+      },
+      error => {
+        console.error('Login error:', error);
+        alert('An error occurred. Please try again.');
+      }
+    );
   }
 }
