@@ -62,10 +62,10 @@ export class CourseComponent implements OnInit {
   }
 
   sendWarning() {
-    this.router.navigate(['warning']);
+    this.router.navigate(['lecturer-dashboard/course/:id/:section/warning']);
   }
 
   generateQrCodePage() {
-    this.router.navigate(['qr-generation']);
+    this.router.navigate(['lecturer-dashboard/course/:id/:section/qr-generation']);
   }
 }
