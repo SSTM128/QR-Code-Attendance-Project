@@ -17,7 +17,7 @@ export class LecturerPathComponent {
 
   constructor(private router:Router) {
   }
-  goToCourse() {
-    this.router.navigate(['course']);
+  goToCourse(course: Course) {
+    this.router.navigate([`lecturer-dashboard/course/${course.courseID}/${course.section}`]);
   }
 }

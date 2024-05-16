@@ -9,17 +9,19 @@ import {LecturerPathComponent} from "./core/lecturer-path/lecturer-path.componen
 import {WarningPageComponent} from "./core/lecturer-path/course/warning-page/warning-page.component";
 import {QrGenerationPageComponent} from "./core/lecturer-path/course/qr-generation-page/qr-generation-page.component";
 import {CourseComponent} from "./core/lecturer-path/course/course.component";
+import {NotificationsComponent} from "./core/notifications/notifications.component";
 
 const routes: Routes = [
   { path: '', redirectTo: '/log-in', pathMatch: 'full' },
   { path: 'log-in', component: LogInComponent },
-  { path: 'student-dashboard', component: StudentPathComponent},
-  { path: 'scanQR', component: ScanPageComponent },
-  { path: 'excuse', component: ExcusePageComponent },
-  { path: 'lecturer-dashboard', component: LecturerPathComponent},
-  { path: 'course', component: CourseComponent},
-  { path: 'warning', component: WarningPageComponent },
-  { path: 'qr-generation', component: QrGenerationPageComponent },
+  { path: 'notification', component: NotificationsComponent },
+  { path: 'student-dashboard', component: StudentPathComponent },
+  { path: 'student-dashboard/scanQR', component: ScanPageComponent },
+  { path: 'student-dashboard/excuse', component: ExcusePageComponent },
+  { path: 'lecturer-dashboard', component: LecturerPathComponent },
+  { path: 'lecturer-dashboard/course/:id/:section', component: CourseComponent },
+  { path: 'lecturer-dashboard/course/:id/:section/warning', component: WarningPageComponent },
+  { path: 'lecturer-dashboard/course/:id/:section/qr-generation', component: QrGenerationPageComponent },
   { path: '**', redirectTo: '/log-in' }
 ];
 

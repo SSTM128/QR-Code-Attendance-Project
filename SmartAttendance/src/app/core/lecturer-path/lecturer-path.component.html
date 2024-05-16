@@ -1,14 +1,23 @@
 <app-header></app-header>
-<div class="flex-col justify-center center-items mx-3 " >
+<app-banner></app-banner>
+<div class="flex-col justify-center center-items w-[82%] lg:w-2/4 mx-auto">
   <div class="flex flex-row justify-between mt-3 p-2 shadow-lg bg-white rounded-md">
-    <h1 class="text-xl block w-full font-base">Name: lecturer name</h1>
+    <h1 class="text-xl block w-full font-base text-center">Name: lecturer name</h1>
     <hr class="mt-3">
   </div>
-  <div class=" w-full mt-3 p-6 shadow-lg bg-white rounded-md" *ngFor="let course of lecturerCourses" >
-    <h1 class="text-xl block text-center font-semibold bg-blue-300 p-1 rounded-md" (click)="goToCourse()">{{course.courseName}}</h1>
+  <div class="w-full mt-3 p-6 shadow-lg bg-white rounded-md" *ngFor="let course of lecturerCourses">
+    <h1
+      class="text-xl block text-center font-semibold bg-blue-300 p-1 rounded-md cursor-pointer"
+      (click)="goToCourse(course)">
+      {{ course.courseName }}
+    </h1>
     <hr class="mt-3">
     <div class="mt-3">
-      <h3 class="text-xl block font-base">{{ course.courseCode }}</h3>
+      <p class="text-center items-center p-1 text-xl font-base">Course Time: {{ course.courseCode }}</p>
+    </div>
+    <hr class="mt-3">
+    <div class="mt-3">
+      <p class="text-center items-center p-1 text-xl font-base">Section Number: {{ course.section }}</p>
     </div>
   </div>
 </div>

@@ -22,7 +22,7 @@ export class StudentPathComponent {
   constructor(private router:Router) {}
 
   sendExcuse() {
-    this.router.navigate(['excuse']);
+    this.router.navigate(['student-dashboard/excuse']);
 
   }
 }
