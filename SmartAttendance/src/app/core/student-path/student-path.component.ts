@@ -4,6 +4,7 @@ import {Student} from "../../Student";
 import {Router} from "@angular/router";
 import {UserService} from "../../user.service";
 import {IUserCredentials} from "../../User.module";
+import {studentService} from "./student.service";
 
 @Component({
   selector: 'app-student-path',
@@ -13,22 +14,25 @@ import {IUserCredentials} from "../../User.module";
 export class StudentPathComponent implements OnInit{
 
   user: IUserCredentials | null = null;
+  studentCourses: Course[] = [];
 
   ngOnInit() {
     this.user = this.userService.getUser();
+    if (this.user && this.user.id) {
+      this.studentService.getCourses(this.user.id).subscribe(
+        courses => {
+          this.studentCourses = courses;
+        },
+        error => {
+          console.error('Error fetching courses:', error);
+        }
+      );
+    }
   }
 
-  studentCourses: Course[] = [
-    new Course(1, "Mathematics", "S/M 9:45-11:15", 101 , 2),
-    new Course(2, "Physics", "T/Th 12:30-2:00", 102  , 1),
-    new Course(3, "Biology", "W/F 10:00-11:30", 103 , 2),
-    new Course(4, "Chemistry",  "T/Th 9:00-10:30", 104 , 3)
-  ];
-  studentInfo = new Student(12345, "John Doe", "john@example.com", "password123", this.studentCourses);
 
-  absentDays: number[] = [2,5,4,3,4,2]
-
-  constructor(private router:Router,
+  constructor(private studentService : studentService,
+              private router:Router,
               private userService: UserService) {}
 
   sendExcuse() {

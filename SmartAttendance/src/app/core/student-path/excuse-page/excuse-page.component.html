@@ -16,7 +16,7 @@
             <mat-label>Select Course</mat-label>
             <mat-select  name="course">
               @for (course of studentCourses; track course) {
-                <mat-option >{{course.courseName}}</mat-option>
+                <mat-option >{{course.name}}</mat-option>
               }
             </mat-select>
           </mat-form-field>
