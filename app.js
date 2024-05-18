@@ -4,6 +4,9 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const attendanceRoutes = require('./routes/attendanceRoutes');
 const loginRoute = require('./routes/login'); // Import login route
+const lecturerCoursesRoute = require('./routes/lecturerCourses'); // Import lecturer courses route
+const courseAttendanceRoute = require('./routes/courseAttendance'); // Import course attendance route
+
 
 const app = express();
 
@@ -22,6 +25,8 @@ mongoose.connect(dbURI, {
 // Routes
 app.use('/attendances', attendanceRoutes);
 app.use('/api', loginRoute); // Add login route
+app.use('/api/courses', lecturerCoursesRoute); // Add lecturer courses route
+app.use('/api/course-attendance', courseAttendanceRoute); // Add course attendance route
 
 app.get('/', (req, res) => {
     res.send('Welcome to the Attendance System');
