@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {Course} from "../../course";
-import {Student} from "../../Student";
 import {Router} from "@angular/router";
 import {UserService} from "../../user.service";
 import {IUserCredentials} from "../../User.module";
 import {studentService} from "./student.service";
+import {Attendance, AttendanceService} from "./studentAttendance.service";
 
 @Component({
   selector: 'app-student-path',
@@ -15,6 +15,7 @@ export class StudentPathComponent implements OnInit{
 
   user: IUserCredentials | null = null;
   studentCourses: Course[] = [];
+  courseAttendance: { [courseId: string]: number } = {};
 
   ngOnInit() {
     this.user = this.userService.getUser();
@@ -22,6 +23,8 @@ export class StudentPathComponent implements OnInit{
       this.studentService.getCourses(this.user.id).subscribe(
         courses => {
           this.studentCourses = courses;
+          this.fetchAllCourseAttendance();
+          console.log(this.courseAttendance);
         },
         error => {
           console.error('Error fetching courses:', error);
@@ -30,8 +33,30 @@ export class StudentPathComponent implements OnInit{
     }
   }
 
+  fetchAllCourseAttendance() {
+    this.studentCourses.forEach(course => {
+      this.attendanceService.getCourseAttendance(course.course_id).subscribe(
+        (attendances: Attendance[]) => {
+          const studentAttendance = attendances.find(
+            attendance => attendance.student_id === this.user?.id
+          );
+          if (studentAttendance) {
+            const absentDays = studentAttendance.attendances.filter(
+              attendance => attendance.status === 'absent'
+            ).length;
+            this.courseAttendance[course.course_id] = absentDays;
+          }
+        },
+        error => {
+          console.error('Error fetching attendance records:', error);
+        }
+      );
+    });
+  }
+
 
   constructor(private studentService : studentService,
+              private attendanceService: AttendanceService,
               private router:Router,
               private userService: UserService) {}
 

@@ -8,6 +8,7 @@ const lecturerCoursesRoute = require('./routes/lecturerCourses'); // Import lect
 const courseAttendanceRoute = require('./routes/courseAttendance'); // Import course attendance route
 const studentCoursesRoute = require('./routes/studentCourses'); // Import student courses route
 const lecturerCourseAttendanceRoute = require('./routes/lecturerCourseAttendance'); // Import lecturer course attendance route
+const notificationsRoute = require('./routes/notifications'); // Import notifications route
 
 
 const app = express();
@@ -31,6 +32,7 @@ app.use('/api/lecturer-courses', lecturerCoursesRoute); // Add lecturer courses 
 app.use('/api/course-attendance', courseAttendanceRoute); // Add course attendance route
 app.use('/api/student-courses', studentCoursesRoute); // Add student courses route
 app.use('/api/lecturer-course-attendance', lecturerCourseAttendanceRoute); // Add lecturer course attendance route
+app.use('/api/notifications', notificationsRoute); // Add notifications route
 
 
 app.get('/', (req, res) => {

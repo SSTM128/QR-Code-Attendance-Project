@@ -4,7 +4,7 @@
     <ul class="items-center flex gap-4">
       <li>
         <a class="hover:bg-blue-300 px-3 py-2.5 rounded-2xl"  routerLinkActive="bg-blue-400"
-           [routerLinkActiveOptions]="{ exact: true }" [routerLink]="'/lecturer-dashboard'">Dashboard</a>
+           [routerLinkActiveOptions]="{ exact: true }" [routerLink]="userRole === 'lecturer' ? '/lecturer-dashboard' : '/student-dashboard'">Dashboard</a>
       </li>
       <li>
         <a class="hover:bg-blue-300 px-3 py-2.5 rounded-2xl"  routerLinkActive="bg-blue-400"

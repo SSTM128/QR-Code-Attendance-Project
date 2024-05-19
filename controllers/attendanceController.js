@@ -37,7 +37,16 @@ exports.getAttendances = async (req, res) => {
           name: '$student_details.name',
           attendances: 1,
           student_department: '$student_details.department',
-          student_email: '$student_details.email'
+          student_email: '$student_details.email',
+          absent_count: {
+            $size: {
+              $filter: {
+                input: '$attendances',
+                as: 'attendance',
+                cond: { $eq: ['$$attendance.status', 'absent'] }
+              }
+            }
+          }
         }
       }
     ];
@@ -48,6 +57,10 @@ exports.getAttendances = async (req, res) => {
     res.status(500).json({ error: error.toString() });
   }
 };
+
+// Other controller methods...
+
+
 
 exports.addAttendance = async (req, res) => {
   try {
