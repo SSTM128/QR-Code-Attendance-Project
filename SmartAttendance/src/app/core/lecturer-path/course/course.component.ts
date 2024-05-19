@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import {IUserCredentials} from "../../../User.module";
-import {UserService} from "../../../user.service";
-import {AttendanceService} from "../../../attendaceRecord.service";
+import { IUserCredentials } from '../../../User.module';
+import { UserService } from '../../../user.service';
+import { AttendanceService } from '../../../attendaceRecord.service';
 
 interface AttendanceRecord {
   date: string;
@@ -31,7 +31,8 @@ export class CourseComponent implements OnInit {
     private userService: UserService,
     private attendanceService: AttendanceService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private cdr: ChangeDetectorRef // Inject ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -74,10 +75,13 @@ export class CourseComponent implements OnInit {
         }
       });
 
+
+
       return record;
     });
 
     this.dataSource = transformedData;
+    this.cdr.detectChanges(); // Notify Angular of the changes
   }
 
   sendWarning() {
