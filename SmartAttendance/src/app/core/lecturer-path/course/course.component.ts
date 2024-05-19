@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import {IUserCredentials} from "../../../User.module";
+import {UserService} from "../../../user.service";
+import {AttendanceService} from "../../../attendaceRecord.service";
 
 interface AttendanceRecord {
   date: string;
@@ -11,6 +13,7 @@ interface StudentAttendance {
   student_id: string;
   name: string;
   attendances: AttendanceRecord[];
+  [key: string]: any; // To allow dynamic keys for dates
 }
 
 @Component({
@@ -19,53 +22,69 @@ interface StudentAttendance {
   styleUrls: ['./course.component.css']
 })
 export class CourseComponent implements OnInit {
-  displayedColumns: string[] = ['student_id', 'name', '12/5', '14/5', '16/5', '18/5', '20/5', '22/5'];
-  dataSource: any[] = [];
+  displayedColumns: string[] = ['student_id', 'name'];
+  dataSource: StudentAttendance[] = [];
+  user: IUserCredentials | null = null;
+  course_id: string = '';
 
-  id :string = ''
-  section = 0
-
-  constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute) {}
+  constructor(
+    private userService: UserService,
+    private attendanceService: AttendanceService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
-    this.fetchAttendanceRecords();
-
+    this.user = this.userService.getUser();
     const idParam = this.route.snapshot.paramMap.get('id');
-    const sectionParam = this.route.snapshot.paramMap.get('section');
 
-    if (idParam !== null && sectionParam !== null) {
-      this.id = idParam;
-      this.section = +sectionParam;
+    if (idParam !== null) {
+      this.course_id = idParam;
     } else {
       console.error('Invalid route parameters');
     }
+
+    this.fetchAttendanceRecords();
   }
 
   fetchAttendanceRecords(): void {
-    this.http.get<StudentAttendance[]>('http://localhost:3000/attendances/')
-      .subscribe(data => {
-        console.log('Fetched data:', data);
-        this.dataSource = data.map(record => ({
-          student_id: record.student_id,
-          name: record.name,
-          '12/5': record.attendances.find(a => a.date === '12/5')?.status || 'N/A',
-          '14/5': record.attendances.find(a => a.date === '14/5')?.status || 'N/A',
-          '16/5': record.attendances.find(a => a.date === '16/5')?.status || 'N/A',
-          '18/5': record.attendances.find(a => a.date === '18/5')?.status || 'N/A',
-          '20/5': record.attendances.find(a => a.date === '20/5')?.status || 'N/A',
-          '22/5': record.attendances.find(a => a.date === '22/5')?.status || 'N/A',
-        }));
-        console.log('Processed dataSource:', this.dataSource);
-      }, error => {
-        console.error('Failed to fetch attendance records:', error);
+    if (this.user && this.user.id) {
+      this.attendanceService.getAttendances(this.user.id, this.course_id).subscribe(
+        attendances => {
+          this.transformAttendanceData(attendances);
+        },
+        error => {
+          console.error('Error fetching attendances:', error);
+        }
+      );
+    }
+  }
+
+  transformAttendanceData(attendances: StudentAttendance[]): void {
+    const transformedData: StudentAttendance[] = attendances.map(att => {
+      const record: any = {
+        student_id: att.student_id,
+        name: att.name
+      };
+
+      att.attendances.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()).forEach(a => {
+        record[a.date] = a.status;
+        if (!this.displayedColumns.includes(a.date)) {
+          this.displayedColumns.push(a.date);
+        }
       });
+
+      return record;
+    });
+
+    this.dataSource = transformedData;
   }
 
   sendWarning() {
-    this.router.navigate(['lecturer-dashboard/course/:id/:section/warning']);
+    this.router.navigate([`lecturer-dashboard/course/${this.course_id}/warning`]);
   }
 
   generateQrCodePage() {
-    this.router.navigate(['lecturer-dashboard/course/:id/:section/qr-generation']);
+    this.router.navigate([`lecturer-dashboard/course/${this.course_id}/qr-generation`]);
   }
 }
