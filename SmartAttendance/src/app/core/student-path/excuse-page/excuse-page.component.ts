@@ -1,22 +1,34 @@
-import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {Router} from "@angular/router";
-import {Course} from "../../../course";
-import {FileUploadService} from "./file-upload.service";
-import {UserService} from "../../../user.service";
-import {IUserCredentials} from "../../../User.module";
-import {studentService} from "../student.service";
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { Course } from '../../../course';
+import { UserService } from '../../../user.service';
+import { IUserCredentials } from '../../../User.module';
+import { studentService } from '../student.service';
+import { NotificationService } from '../../../notification.service';
 
 @Component({
   selector: 'app-excuse-page',
   templateUrl: './excuse-page.component.html',
-  styleUrl: './excuse-page.component.css'
+  styleUrls: ['./excuse-page.component.css']
 })
-export class ExcusePageComponent implements OnInit{
-  selectedFile :File | null=  null;
-  user : IUserCredentials | null = null;
-  courses : Course[] = []
+export class ExcusePageComponent implements OnInit {
+  selectedFile: File | null = null;
+  user: IUserCredentials | null = null;
+  courses: Course[] = [];
 
+  excuseForm = new FormGroup({
+    course_id: new FormControl('', [Validators.required]),
+    date: new FormControl('', Validators.required),
+    reason: new FormControl('', [Validators.required]),
+  });
+
+  constructor(
+    private router: Router,
+    private userService: UserService,
+    private studentService: studentService,
+    private notificationService: NotificationService
+  ) {}
 
   ngOnInit() {
     this.user = this.userService.getUser();
@@ -24,27 +36,12 @@ export class ExcusePageComponent implements OnInit{
       this.studentService.getCourses(this.user.id).subscribe(
         courses => {
           this.courses = courses;
-          console.log('here');
         },
         error => {
           console.error('Error fetching courses:', error);
         }
       );
     }
-  }
-
-
-  excuseForm= new FormGroup({
-    course_id : new FormControl("", [Validators.required]),
-    date: new FormControl('' , Validators.required),
-    reason: new FormControl("", [Validators.required]),
-  });
-
-  constructor(private router: Router,
-              private uploadService: FileUploadService,
-              private userService: UserService,
-              private studentService : studentService
-              ) {
   }
 
   onFileSelected(event: Event) {
@@ -56,24 +53,45 @@ export class ExcusePageComponent implements OnInit{
     }
   }
 
-  sendWarning() {
-    if (this.excuseForm.valid && this.selectedFile) {
-      const formData = new FormData();
-      formData.append('course_id', this.excuseForm.get('course_id')?.value ?? '');
-      formData.append('date', this.excuseForm.get('date')?.value ?? '');
-      formData.append('reason', this.excuseForm.get('reason')?.value ?? '');
-      // formData.append('file', this.selectedFile);
+  sendExcuse() {
+    if (this.excuseForm.valid) {
+      const selectedCourse = this.courses.find(course => course.course_id === this.excuseForm.get('course_id')?.value);
+      const recipient_id = selectedCourse?.lecturer_id || '';
+      const sender_id = this.user?.id || '';
+      const comments = this.excuseForm.get('reason')?.value;
+      const course_id = this.excuseForm.get('course_id')?.value;
 
-      this.uploadService.uploadFile(formData).subscribe(
-        response => {
-          console.log('Upload successful', response);
-        },
-        error => {
-          console.error('Upload failed', error);
-        });
-    } else {
-      console.warn('Form is invalid or no file selected');
+      const notification = {
+        recipient_id,
+        sender_id,
+        message: comments,
+        date_sent: new Date().toISOString().split('T')[0],
+        course_id
+      };
+
+      if (this.selectedFile) {
+        this.notificationService.createNotification(notification, this.selectedFile).subscribe(
+          response => {
+            console.log('Notification created:', response);
+            this.router.navigate(['student-dashboard']);
+          },
+          error => {
+            console.error('Error creating notification:', error);
+          }
+        );
+
+
+      } else {
+        this.notificationService.createNotification(notification).subscribe(
+          response => {
+            console.log('Notification created:', response);
+            this.router.navigate(['student-dashboard']);
+          },
+          error => {
+            console.error('Error creating notification:', error);
+          }
+        );
+      }
     }
-    this.router.navigate(['student-dashboard']);
   }
 }
