@@ -31,7 +31,7 @@ export class NotificationsComponent implements OnInit{
   }
 
   downloadFile(filename: string): void {
-    this.notificationService.getFile(filename).subscribe(
+    this.notificationService.downloadFile(filename).subscribe(
       response => {
         const url = window.URL.createObjectURL(response);
         const link = document.createElement('a');

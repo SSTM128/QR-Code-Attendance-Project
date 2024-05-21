@@ -11,7 +11,9 @@ interface AttendanceRecord {
 interface StudentAttendance {
   student_id: string;
   name: string;
+  absent_count: string;
   attendances: AttendanceRecord[];
+  [key: string]: any;
 }
 @Injectable({
   providedIn: 'root'

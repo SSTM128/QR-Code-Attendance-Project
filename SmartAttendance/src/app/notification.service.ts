@@ -8,6 +8,8 @@ import { Notification } from './notification'; // Ensure this path is correct
 })
 export class NotificationService {
   private apiUrl = 'http://localhost:3000/api/notifications'; // Adjust the URL as needed
+  private fileDownloadUrl = 'http://localhost:3000/api/files'; // URL for file downloads
+
 
   constructor(private http: HttpClient) {}
 
@@ -30,7 +32,11 @@ export class NotificationService {
     return this.http.post<Notification>(this.apiUrl, formData);
   }
 
-  getFile(filename: string): Observable<Blob> {
-    return this.http.get(`${this.apiUrl}/file/${filename}`, { responseType: 'blob' });
+  downloadFile(notificationId: string): Observable<Blob> {
+    return this.http.get(`${this.fileDownloadUrl}/${notificationId}`, { responseType: 'blob' });
+  }
+
+  deleteNotification(notification_id: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/delete/${notification_id}`);
   }
 }

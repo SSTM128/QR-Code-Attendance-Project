@@ -1,12 +1,12 @@
 .example-container {
   height: 400px;
-  width: 550px;
+  width: 900px;
   max-width: 100%;
   overflow: auto;
 }
 
 table {
-  width: 800px;
+  width: 700px;
 }
 
 td.mat-column-star {
@@ -24,4 +24,37 @@ th.mat-column-position, td.mat-column-position {
 
 .mat-mdc-table-sticky-border-elem-left {
   border-right: 1px solid #e0e0e0;
+}
+
+.green {
+  color: green;
+}
+
+.orange {
+  color: orange;
+}
+
+.red {
+  color: red;
+}
+
+/* Responsive styles */
+@media (min-width: 1024px) {
+  .example-container {
+    width: 900px;
+  }
+
+  table {
+    width: 900px;
+  }
+}
+
+@media (max-width: 1023px) {
+  .example-container {
+    width: 100%;
+  }
+
+  table {
+    width: 100%;
+  }
 }
