@@ -12,6 +12,7 @@ interface AttendanceRecord {
 interface StudentAttendance {
   student_id: string;
   name: string;
+  absent_count: string; // Make absent_days optional
   attendances: AttendanceRecord[];
   [key: string]: any; // To allow dynamic keys for dates
 }
@@ -22,7 +23,7 @@ interface StudentAttendance {
   styleUrls: ['./course.component.css']
 })
 export class CourseComponent implements OnInit {
-  displayedColumns: string[] = ['student_id', 'name'];
+  displayedColumns: string[] = ['student_id', 'name', 'absent_days'];
   dataSource: StudentAttendance[] = [];
   user: IUserCredentials | null = null;
   course_id: string = '';
@@ -65,7 +66,8 @@ export class CourseComponent implements OnInit {
     const transformedData: StudentAttendance[] = attendances.map(att => {
       const record: any = {
         student_id: att.student_id,
-        name: att.name
+        name: att.name,
+        absent_count: att.absent_count // Ensure absent_days is included and default to '0' if missing
       };
 
       att.attendances.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()).forEach(a => {
@@ -74,8 +76,6 @@ export class CourseComponent implements OnInit {
           this.displayedColumns.push(a.date);
         }
       });
-
-
 
       return record;
     });
