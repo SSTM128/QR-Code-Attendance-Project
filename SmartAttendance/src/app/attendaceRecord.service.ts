@@ -19,7 +19,7 @@ interface StudentAttendance {
   providedIn: 'root'
 })
 export class AttendanceService {
-  private apiUrl = 'http://localhost:3000/api/lecturer-course-attendance'; // Adjust the URL as needed
+  private apiUrl = 'http://192.168.1.39:3000/api/lecturer-course-attendance'; // Adjust the URL as needed
 
   constructor(private http: HttpClient) {}
 

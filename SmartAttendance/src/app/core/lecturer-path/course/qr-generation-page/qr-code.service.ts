@@ -8,7 +8,7 @@ import {IUser} from "../../../../User.module";
 })
 export class QrCodeService {
 
-  private baseUrl = 'http://localhost:3000/qr/generate';
+  private baseUrl = 'http://192.168.1.39:3000/qr/generate';
 
   constructor(private http: HttpClient) {}
 

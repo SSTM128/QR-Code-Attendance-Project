@@ -73,10 +73,10 @@ exports.addAttendance = async (req, res) => {
 };
 
 exports.updateAttendance = async (req, res) => {
-  const { inClassNo, date, status } = req.body;
+  const { student_id, date, status  } = req.body;
 
   try {
-    const record = await Attendance.findOne({ inClassNumber: inClassNo });
+    const record = await Attendance.findOne({ student_id: student_id });
     if (record) {
       const attendance = record.attendances.find(a => a.date === date);
       if (attendance) {

@@ -8,7 +8,7 @@ import {Course} from "../../course";
   providedIn: 'root'
 })
 export class LecturerService {
-  private apiUrl = 'http://localhost:3000/api/lecturer-courses'; // Adjust the URL as needed
+  private apiUrl = 'http://192.168.1.39:3000/api/lecturer-courses'; // Adjust the URL as needed
 
   constructor(private http: HttpClient) {}
 
