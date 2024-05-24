@@ -56,4 +56,12 @@ export class WarningPageComponent implements OnInit {
       );
     }
   }
+
+  cancel(): void {
+    if (this.course_id) {
+      this.router.navigate([`/lecturer-dashboard/course/${this.course_id}`]);
+    } else {
+      console.error('Course ID is missing');
+    }
+  }
 }

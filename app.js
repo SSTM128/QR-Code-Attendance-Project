@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const attendanceRoutes = require('./routes/attendanceRoutes');
+const attendanceRoutes = require('./routes/attendanceRoutes'); // Ensure this path is correct
 const loginRoute = require('./routes/login'); // Import login route
 const lecturerCoursesRoute = require('./routes/lecturerCourses'); // Import lecturer courses route
 const courseAttendanceRoute = require('./routes/courseAttendance'); // Import course attendance route
@@ -11,6 +11,8 @@ const lecturerCourseAttendanceRoute = require('./routes/lecturerCourseAttendance
 const notificationsRoute = require('./routes/notifications'); // Import notifications route
 const fileUploadRoute = require('./routes/fileUpload'); // Import file upload route
 const fileDownloadRoute = require('./routes/fileDownload'); // Import file download route
+const qrRoutes = require('./routes/qrRoutes'); // Import QR routes
+const qrUpdateRoute = require('./routes/qrUpdate'); // Import QR update route
 
 
 
@@ -33,7 +35,7 @@ mongoose.connect(dbURI, {
 
 
 // Routes to be used and their api line
-app.use('/attendances', attendanceRoutes);
+app.use('/api/attendances', attendanceRoutes); // Ensure the base route is correct
 app.use('/api', loginRoute); // Add login route
 app.use('/api/lecturer-courses', lecturerCoursesRoute); // Add lecturer courses route
 app.use('/api/course-attendance', courseAttendanceRoute); // Add course attendance route
@@ -42,7 +44,8 @@ app.use('/api/lecturer-course-attendance', lecturerCourseAttendanceRoute); // Ad
 app.use('/api/notifications', notificationsRoute); // Add notifications route
 app.use('/api/files', fileUploadRoute); // Add file upload route
 app.use('/api/files', fileDownloadRoute); // Add file download route
-
+app.use('/api/qr', qrRoutes); // Add QR route to generate new pass and time
+app.use('/api/qr', qrUpdateRoute); // Add QR update route
 
 
 
