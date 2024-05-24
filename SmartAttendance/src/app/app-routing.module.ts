@@ -10,6 +10,7 @@ import {WarningPageComponent} from "./core/lecturer-path/course/warning-page/war
 import {QrGenerationPageComponent} from "./core/lecturer-path/course/qr-generation-page/qr-generation-page.component";
 import {CourseComponent} from "./core/lecturer-path/course/course.component";
 import {NotificationsComponent} from "./core/notifications/notifications.component";
+import {UpdateStatusComponent} from "./core/lecturer-path/course/update-status/update-status.component";
 
 const routes: Routes = [
   { path: '', redirectTo: '/log-in', pathMatch: 'full' },
@@ -22,6 +23,7 @@ const routes: Routes = [
   { path: 'lecturer-dashboard/course/:id', component: CourseComponent },
   { path: 'lecturer-dashboard/course/:id/warning', component: WarningPageComponent },
   { path: 'lecturer-dashboard/course/:id/qr-generation', component: QrGenerationPageComponent },
+  { path: 'lecturer-dashboard/course/:id/update-status', component: UpdateStatusComponent },
   { path: '**', redirectTo: '/log-in' }
 ];
 

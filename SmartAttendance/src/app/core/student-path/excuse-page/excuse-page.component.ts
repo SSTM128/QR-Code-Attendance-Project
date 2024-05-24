@@ -61,11 +61,22 @@ export class ExcusePageComponent implements OnInit {
       const comments = this.excuseForm.get('reason')?.value;
       const course_id = this.excuseForm.get('course_id')?.value;
 
+      const dateControl = this.excuseForm.get('date');
+      let dateSent = '';
+      if (dateControl && dateControl.value) {
+        const dateValue = dateControl.value;
+        const date = new Date(dateValue);
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+        const year = date.getFullYear();
+        dateSent = `${year}/${month}/${day}`;
+      }
+
       const notification = {
         recipient_id,
         sender_id,
         message: comments,
-        date_sent: new Date().toISOString().split('T')[0],
+        date_sent: dateSent,
         course_id
       };
 
@@ -93,5 +104,9 @@ export class ExcusePageComponent implements OnInit {
         );
       }
     }
+  }
+
+  cancel(): void {
+      this.router.navigate([`/student-dashboard/`]);
   }
 }

@@ -12,7 +12,7 @@ interface AttendanceRecord {
 interface StudentAttendance {
   student_id: string;
   name: string;
-  absent_count: string; // Make absent_days optional
+  absent_count: string;
   attendances: AttendanceRecord[];
   [key: string]: any; // To allow dynamic keys for dates
 }
@@ -22,6 +22,7 @@ interface StudentAttendance {
   templateUrl: './course.component.html',
   styleUrls: ['./course.component.css']
 })
+
 export class CourseComponent implements OnInit {
   displayedColumns: string[] = ['student_id', 'name', 'absent_days'];
   dataSource: StudentAttendance[] = [];
@@ -49,6 +50,22 @@ export class CourseComponent implements OnInit {
     this.fetchAttendanceRecords();
   }
 
+  getRowClass(element: any): string {
+    const index = this.dataSource.indexOf(element);
+    return index % 2 === 0 ? 'bg-blue-200' : 'bg-blue-300';
+  }
+
+  getAbsentDaysClass(absentCount: number): string {
+    if (absentCount < 5) {
+      return 'green';
+    } else if (absentCount === 5 ) {
+      return 'orange';
+    } else {
+      return 'red';
+    }
+  }
+
+
   fetchAttendanceRecords(): void {
     if (this.user && this.user.id) {
       this.attendanceService.getAttendances(this.user.id, this.course_id).subscribe(
@@ -67,18 +84,28 @@ export class CourseComponent implements OnInit {
       const record: any = {
         student_id: att.student_id,
         name: att.name,
-        absent_count: att.absent_count // Ensure absent_days is included and default to '0' if missing
+        absent_count: att.absent_count // Ensure absent_days is included
       };
 
       att.attendances.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()).forEach(a => {
         record[a.date] = a.status;
-        if (!this.displayedColumns.includes(a.date)) {
-          this.displayedColumns.push(a.date);
-        }
       });
 
       return record;
     });
+
+    // Reset displayedColumns to avoid duplicates
+    const staticColumns = ['student_id', 'name', 'absent_days'];
+    const dateColumns = transformedData.reduce((columns, record) => {
+      Object.keys(record).forEach(key => {
+        if (key.includes('/') && !columns.includes(key)) {
+          columns.push(key);
+        }
+      });
+      return columns;
+    }, [] as string[]).sort();
+
+    this.displayedColumns = [...staticColumns, ...dateColumns];
 
     this.dataSource = transformedData;
     this.cdr.detectChanges(); // Notify Angular of the changes
@@ -90,5 +117,8 @@ export class CourseComponent implements OnInit {
 
   generateQrCodePage() {
     this.router.navigate([`lecturer-dashboard/course/${this.course_id}/qr-generation`]);
+  }
+  updateStatus() {
+    this.router.navigate([`lecturer-dashboard/course/${this.course_id}/update-status`]);
   }
 }

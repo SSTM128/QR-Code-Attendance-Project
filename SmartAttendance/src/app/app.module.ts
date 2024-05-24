@@ -31,6 +31,10 @@ import {MatIcon} from "@angular/material/icon";
 import { CourseComponent } from './core/lecturer-path/course/course.component';
 import { BannerComponent } from './Helpers/banner/banner.component';
 import { NotificationsComponent } from './core/notifications/notifications.component';
+import {QRCodeModule} from "angularx-qrcode";
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { UpdateStatusComponent } from './core/lecturer-path/course/update-status/update-status.component';
+import {MatRadioButton, MatRadioGroup} from "@angular/material/radio";
 
 @NgModule({
   declarations: [
@@ -47,6 +51,7 @@ import { NotificationsComponent } from './core/notifications/notifications.compo
     FooterComponent,
     BannerComponent,
     NotificationsComponent,
+    UpdateStatusComponent,
 
   ],
   imports: [
@@ -71,7 +76,10 @@ import { NotificationsComponent } from './core/notifications/notifications.compo
     MatSortHeader,
     MatPaginator,
     MatIcon,
-    RouterModule
+    RouterModule,
+    QRCodeModule,
+    MatRadioGroup,
+    MatRadioButton
 
   ],
   providers: [
