@@ -7,8 +7,8 @@ import { Notification } from './notification'; // Ensure this path is correct
   providedIn: 'root'
 })
 export class NotificationService {
-  private apiUrl = 'http://192.168.1.39:3000/api/notifications'; // Adjust the URL as needed
-  private fileDownloadUrl = 'http://192.168.1.39:3000/api/files'; // URL for file downloads
+  private apiUrl = 'http://192.168.1.40:3000/api/notifications'; // Adjust the URL as needed
+  private fileDownloadUrl = 'http://192.168.1.40:3000/api/files'; // URL for file downloads
 
 
   constructor(private http: HttpClient) {}

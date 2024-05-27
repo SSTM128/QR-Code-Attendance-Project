@@ -35,6 +35,7 @@ import {QRCodeModule} from "angularx-qrcode";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { UpdateStatusComponent } from './core/lecturer-path/course/update-status/update-status.component';
 import {MatRadioButton, MatRadioGroup} from "@angular/material/radio";
+import {ZXingScannerModule} from "@zxing/ngx-scanner";
 
 @NgModule({
   declarations: [
@@ -54,34 +55,35 @@ import {MatRadioButton, MatRadioGroup} from "@angular/material/radio";
     UpdateStatusComponent,
 
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    HttpClientModule,
-    FormsModule,
-    MatNativeDateModule,
-    MatDatepicker,
-    RouterOutlet,
-    MatInputModule,
-    MatDatepickerToggle,
-    MatDatepickerInput,
-    MatButton,
-    ReactiveFormsModule,
-    MatSidenavModule,
-    MatSelect,
-    MatOption,
-    MatTableModule,
-    MatProgressSpinner,
-    MatSort,
-    MatSortHeader,
-    MatPaginator,
-    MatIcon,
-    RouterModule,
-    QRCodeModule,
-    MatRadioGroup,
-    MatRadioButton
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        HttpClientModule,
+        FormsModule,
+        MatNativeDateModule,
+        MatDatepicker,
+        RouterOutlet,
+        MatInputModule,
+        MatDatepickerToggle,
+        MatDatepickerInput,
+        MatButton,
+        ReactiveFormsModule,
+        MatSidenavModule,
+        MatSelect,
+        MatOption,
+        MatTableModule,
+        MatProgressSpinner,
+        MatSort,
+        MatSortHeader,
+        MatPaginator,
+        MatIcon,
+        RouterModule,
+        QRCodeModule,
+        MatRadioGroup,
+        MatRadioButton,
+        ZXingScannerModule
 
-  ],
+    ],
   providers: [
     provideAnimationsAsync()
   ],

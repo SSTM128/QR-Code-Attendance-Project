@@ -64,4 +64,9 @@ export class StudentPathComponent implements OnInit{
     this.router.navigate(['student-dashboard/excuse']);
 
   }
+
+  scanQrCode() {
+    this.router.navigate(['student-dashboard/scanQR']);
+
+  }
 }
