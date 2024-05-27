@@ -8,16 +8,6 @@ router.post('/generate/:course_id', async (req, res) => {
   const { course_id } = req.params;
   const { validity_period, date } = req.body; // Get the validity period and date from the request body
 
-
-// Helper function to format date as YYYY/MM/DD
-  const formatDateAsString = (date) => {
-    const dateObj = new Date(date);
-    const year = dateObj.getFullYear();
-    const month = (dateObj.getMonth() + 1).toString().padStart(2, '0');
-    const day = dateObj.getDate().toString().padStart(2, '0');
-    return `${year}/${month}/${day}`;
-  };
-
   // Generate a random passcode (e.g., 6 characters long)
   const generatePasscode = () => {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -31,6 +21,17 @@ router.post('/generate/:course_id', async (req, res) => {
   const passcode = generatePasscode();
   const validityStartTime = new Date(); // Set the start time to now
   const validityEndTime = new Date(validityStartTime.getTime() + validity_period * 60 * 1000); // Add validity period in minutes
+
+  // Format the date to YYYY/MM/DD
+  const formatDate = (date) => {
+    const d = new Date(date);
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}/${month}/${day}`;
+  };
+
+  const formattedDate = formatDate(date);
 
   try {
     // Check if a QR code record exists for the given course_id
@@ -51,19 +52,19 @@ router.post('/generate/:course_id', async (req, res) => {
     const attendanceRecords = await Attendance.find({ course_id: course_id });
 
     for (const record of attendanceRecords) {
-      const attendanceEntry = record.attendances.find(a => a.date === formatDateAsString);
+      const attendanceEntry = record.attendances.find(a => a.date === formattedDate);
 
       if (attendanceEntry && attendanceEntry.status !== 'attended') {
         attendanceEntry.status = 'absent';
       } else if (!attendanceEntry) {
         // If no attendance entry for that date, add it as 'absent' without _id
-        record.attendances.push({ date: formatDateAsString, status: 'absent' });
+        record.attendances.push({ date: formattedDate, status: 'absent' });
       }
 
       // Remove _id field from all attendances that do not already have an _id
       record.attendances = record.attendances.map(att => {
         if (!att._id) {
-          return { date: att.date, status: att.status };
+          delete att._id;
         }
         return att;
       });

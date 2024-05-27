@@ -2,26 +2,37 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const attendanceRoutes = require('./routes/attendanceRoutes'); // Ensure this path is correct
-const loginRoute = require('./routes/login'); // Import login route
-const lecturerCoursesRoute = require('./routes/lecturerCourses'); // Import lecturer courses route
-const courseAttendanceRoute = require('./routes/courseAttendance'); // Import course attendance route
-const studentCoursesRoute = require('./routes/studentCourses'); // Import student courses route
-const lecturerCourseAttendanceRoute = require('./routes/lecturerCourseAttendance'); // Import lecturer course attendance route
-const notificationsRoute = require('./routes/notifications'); // Import notifications route
-const fileUploadRoute = require('./routes/fileUpload'); // Import file upload route
-const fileDownloadRoute = require('./routes/fileDownload'); // Import file download route
-const qrRoutes = require('./routes/qrRoutes'); // Import QR routes
-const qrUpdateRoute = require('./routes/qrUpdate'); // Import QR update route
-
-
-
-//end of route declaration
+const attendanceRoutes = require('./routes/attendanceRoutes');
+const loginRoute = require('./routes/login');
+const lecturerCoursesRoute = require('./routes/lecturerCourses');
+const courseAttendanceRoute = require('./routes/courseAttendance');
+const studentCoursesRoute = require('./routes/studentCourses');
+const lecturerCourseAttendanceRoute = require('./routes/lecturerCourseAttendance');
+const notificationsRoute = require('./routes/notifications');
+const fileUploadRoute = require('./routes/fileUpload');
+const fileDownloadRoute = require('./routes/fileDownload');
+const qrRoutes = require('./routes/qrRoutes');
+const qrUpdateRoute = require('./routes/qrUpdate');
 
 const app = express();
 
 // Middleware
-app.use(cors());
+const allowedOrigins = [
+    'http://192.168.1.40:4200',
+    'https://b54b-2a01-9700-1623-1000-6055-3a44-feec-4fd2.ngrok-free.app',
+    'https://9d0f-2a01-9700-1623-1000-6055-3a44-feec-4fd2.ngrok-free.app'
+];
+
+app.use(cors({
+    origin: function (origin, callback) {
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.indexOf(origin) === -1) {
+            const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+            return callback(new Error(msg), false);
+        }
+        return callback(null, true);
+    }
+}));
 app.use(bodyParser.json());
 
 // MongoDB Atlas Connection
@@ -30,28 +41,22 @@ mongoose.connect(dbURI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 }).then(() => console.log('MongoDB connected via Atlas'))
-  .catch(err => console.log(err));
+    .catch(err => console.log(err));
 
+// Routes
+app.use('/api/attendances', attendanceRoutes);
+app.use('/api', loginRoute);
+app.use('/api/lecturer-courses', lecturerCoursesRoute);
+app.use('/api/course-attendance', courseAttendanceRoute);
+app.use('/api/student-courses', studentCoursesRoute);
+app.use('/api/lecturer-course-attendance', lecturerCourseAttendanceRoute);
+app.use('/api/notifications', notificationsRoute);
+app.use('/api/files', fileUploadRoute);
+app.use('/api/files', fileDownloadRoute);
+app.use('/api/qr', qrRoutes);
+app.use('/api/qr', qrUpdateRoute);
 
-
-// Routes to be used and their api line
-app.use('/api/attendances', attendanceRoutes); // Ensure the base route is correct
-app.use('/api', loginRoute); // Add login route
-app.use('/api/lecturer-courses', lecturerCoursesRoute); // Add lecturer courses route
-app.use('/api/course-attendance', courseAttendanceRoute); // Add course attendance route
-app.use('/api/student-courses', studentCoursesRoute); // Add student courses route
-app.use('/api/lecturer-course-attendance', lecturerCourseAttendanceRoute); // Add lecturer course attendance route
-app.use('/api/notifications', notificationsRoute); // Add notifications route
-app.use('/api/files', fileUploadRoute); // Add file upload route
-app.use('/api/files', fileDownloadRoute); // Add file download route
-app.use('/api/qr', qrRoutes); // Add QR route to generate new pass and time
-app.use('/api/qr', qrUpdateRoute); // Add QR update route
-
-
-
-
-
-//check app is working when running server.js
+// Test route
 app.get('/', (req, res) => {
     res.send('Welcome to the Attendance System');
 });

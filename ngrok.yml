@@ -1,0 +1,6 @@
+version: "2"
+authtoken: 2gxuiVHo3KwucvtMJVa5q5oss3y_88QZTygSnWjz3PCJYB7iK
+tunnels:
+  frontend:
+    addr: 192.168.1.40:4200
+    proto: http

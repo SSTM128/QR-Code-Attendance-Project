@@ -1,1 +1,5 @@
-ng serve --host 192.168.1.39 --port 4200 command
+ng serve --host 192.168.1.39 --port 4200 command alaa laptop
+ng serve --host 192.168.1.40 --port 4200 command alaa PC
+
+run the yml file
+ngrok start --all --config=ngrok.yml

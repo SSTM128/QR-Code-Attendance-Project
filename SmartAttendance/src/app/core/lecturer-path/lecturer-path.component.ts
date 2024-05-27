@@ -16,18 +16,23 @@ export class LecturerPathComponent implements OnInit{
 
   ngOnInit() {
     this.user = this.userService.getUser();
-
     if (this.user && this.user.id) {
-      this.lecturerService.getCourses(this.user.id).subscribe(
-        courses => {
-          this.lecturerCourses = courses;
-          console.log(this.lecturerCourses[0].name);
-        },
-        error => {
-          console.error('Error fetching courses:', error);
-        }
-      );
+      this.fetchCourses(this.user.id);
+
     }
+  }
+
+  fetchCourses(lecturerId: string) {
+    this.lecturerService.getCourses(lecturerId).subscribe(
+      courses => {
+        this.lecturerCourses = courses;
+        console.log(this.lecturerCourses);
+      },
+      error => {
+        console.error('Error fetching courses:', error);
+        alert('An error occurred while fetching courses. Please try again.');
+      }
+    );
   }
 
 

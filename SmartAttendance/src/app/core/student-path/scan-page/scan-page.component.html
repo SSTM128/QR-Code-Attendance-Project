@@ -1,3 +1,17 @@
 <app-header></app-header>
 <app-banner></app-banner>
-<app-footer></app-footer>
+<div class="w-[80%] justify-between items-center mx-auto">
+<div>
+  <label for="cameraSelection">Select Camera:</label>
+  <select id="cameraSelection" (change)="onDeviceSelect($event)">
+    <option *ngFor="let device of availableDevices" [value]="device.deviceId">{{ device.label }}</option>
+  </select>
+</div>
+
+<zxing-scanner
+  #scanner
+  [autostart]="true"
+  [device]="selectedDevice">
+</zxing-scanner>
+</div>
+
