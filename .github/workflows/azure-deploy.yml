@@ -23,7 +23,7 @@ jobs:
 
       - name: Build Angular app
         run: |
-          cd frontend-folder
+          cd SmartAttendance
           npm install
           npm run build
           cd ..
