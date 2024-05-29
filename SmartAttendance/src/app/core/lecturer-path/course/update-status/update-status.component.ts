@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import {AttendanceService} from "../../../../attendaceRecord.service";
+import {FeedbackPopupComponent} from "../../../../Helpers/feedback-popup/feedback-popup.component";
+import {MatDialog} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-update-status',
@@ -20,7 +22,8 @@ export class UpdateStatusComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private attendanceService: AttendanceService
+    private attendanceService: AttendanceService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -39,7 +42,11 @@ export class UpdateStatusComponent implements OnInit {
       const formattedDate = this.formatDateString(date);
       this.attendanceService.updateAttendance(student_id, this.course_id, formattedDate, status).subscribe(response => {
         console.log('Status updated:', response);
+
         this.router.navigate([`/lecturer-dashboard/course/${this.course_id}`]);
+        this.dialog.open(FeedbackPopupComponent, {
+          data: { message: 'Status has been updated successfully!' }
+        });
       });
     } else {
       console.error('Course ID is missing');

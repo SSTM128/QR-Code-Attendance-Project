@@ -6,6 +6,8 @@ import { UserService } from '../../../user.service';
 import { IUserCredentials } from '../../../User.module';
 import { studentService } from '../student.service';
 import { NotificationService } from '../../../notification.service';
+import {MatDialog} from "@angular/material/dialog";
+import {FeedbackPopupComponent} from "../../../Helpers/feedback-popup/feedback-popup.component";
 
 @Component({
   selector: 'app-excuse-page',
@@ -27,7 +29,8 @@ export class ExcusePageComponent implements OnInit {
     private router: Router,
     private userService: UserService,
     private studentService: studentService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit() {
@@ -85,6 +88,9 @@ export class ExcusePageComponent implements OnInit {
           response => {
             console.log('Notification created:', response);
             this.router.navigate(['student-dashboard']);
+            this.dialog.open(FeedbackPopupComponent, {
+              data: { message: 'Excuse has been sent successfully!' }
+            });
           },
           error => {
             console.error('Error creating notification:', error);

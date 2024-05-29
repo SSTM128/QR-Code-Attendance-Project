@@ -1,4 +1,7 @@
 const app = require('./app');
+const IP_ADDRESS = '192.168.1.40'; // Your local IP address
 const PORT = 3000;
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, IP_ADDRESS, () => {
+    console.log(`Server is running on http://${IP_ADDRESS}:${PORT}`);
+});

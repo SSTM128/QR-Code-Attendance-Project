@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { IUserCredentials } from '../../../User.module';
 import { UserService } from '../../../user.service';
 import { AttendanceService } from '../../../attendaceRecord.service';
+import { NotificationService } from '../../../notification.service'; // Import NotificationService
 
 interface AttendanceRecord {
   date: string;
@@ -28,10 +29,10 @@ export class CourseComponent implements OnInit {
   dataSource: StudentAttendance[] = [];
   user: IUserCredentials | null = null;
   course_id: string = '';
-
   constructor(
     private userService: UserService,
     private attendanceService: AttendanceService,
+    private notificationService: NotificationService, // Inject NotificationService
     private router: Router,
     private route: ActivatedRoute,
     private cdr: ChangeDetectorRef // Inject ChangeDetectorRef
@@ -58,13 +59,12 @@ export class CourseComponent implements OnInit {
   getAbsentDaysClass(absentCount: number): string {
     if (absentCount < 5) {
       return 'green';
-    } else if (absentCount === 5 ) {
+    } else if (absentCount === 5) {
       return 'orange';
     } else {
       return 'red';
     }
   }
-
 
   fetchAttendanceRecords(): void {
     if (this.user && this.user.id) {
@@ -87,12 +87,20 @@ export class CourseComponent implements OnInit {
         absent_count: att.absent_count // Ensure absent_days is included
       };
 
+      if (parseInt(att.absent_count) === 6) {
+        this.createNotification(att.student_id);
+      }
+
       att.attendances.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()).forEach(a => {
         record[a.date] = a.status;
       });
 
+      // Check if the student has exactly 6 absent days
+
+
       return record;
     });
+
 
     // Reset displayedColumns to avoid duplicates
     const staticColumns = ['student_id', 'name', 'absent_days'];
@@ -104,11 +112,29 @@ export class CourseComponent implements OnInit {
       });
       return columns;
     }, [] as string[]).sort();
-
     this.displayedColumns = [...staticColumns, ...dateColumns];
-
     this.dataSource = transformedData;
     this.cdr.detectChanges(); // Notify Angular of the changes
+  }
+
+  createNotification(student_id: string): void {
+    const message = 'The student has exceeded the absent days limit.';
+    const notification = {
+      recipient_id: student_id,
+      sender_id: this.user?.id || '',
+      message,
+      date_sent: new Date().toISOString().split('T')[0], // Format date as YYYY-MM-DD
+      course_id: this.course_id
+    };
+
+    this.notificationService.createNotification(notification).subscribe(
+      response => {
+        console.log('Notification created:', response);
+      },
+      error => {
+        console.error('Error creating notification:', error);
+      }
+    );
   }
 
   sendWarning() {
@@ -118,7 +144,14 @@ export class CourseComponent implements OnInit {
   generateQrCodePage() {
     this.router.navigate([`lecturer-dashboard/course/${this.course_id}/qr-generation`]);
   }
+
   updateStatus() {
     this.router.navigate([`lecturer-dashboard/course/${this.course_id}/update-status`]);
+  }
+
+  navigateToWarningForm(student_id: string, absent_days: string): void {
+    this.router.navigate([`/lecturer-dashboard/course/${this.course_id}/warning`], {
+      queryParams: { student_id, absent_days }
+    });
   }
 }

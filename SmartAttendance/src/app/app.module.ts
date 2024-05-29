@@ -11,6 +11,7 @@ import { HeaderComponent } from './Helpers/header/header.component';
 import { FooterComponent } from './Helpers/footer/footer.component';
 import {LecturerPathComponent} from "./core/lecturer-path/lecturer-path.component";
 
+
 import {WarningPageComponent} from "./core/lecturer-path/course/warning-page/warning-page.component";
 import {QrGenerationPageComponent} from "./core/lecturer-path/course/qr-generation-page/qr-generation-page.component";
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
@@ -35,6 +36,9 @@ import {QRCodeModule} from "angularx-qrcode";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { UpdateStatusComponent } from './core/lecturer-path/course/update-status/update-status.component';
 import {MatRadioButton, MatRadioGroup} from "@angular/material/radio";
+import {ZXingScannerModule} from "@zxing/ngx-scanner";
+import {MatDialogModule} from "@angular/material/dialog";
+import { FeedbackPopupComponent } from './Helpers/feedback-popup/feedback-popup.component';
 
 @NgModule({
   declarations: [
@@ -52,36 +56,39 @@ import {MatRadioButton, MatRadioGroup} from "@angular/material/radio";
     BannerComponent,
     NotificationsComponent,
     UpdateStatusComponent,
+    FeedbackPopupComponent,
 
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    HttpClientModule,
-    FormsModule,
-    MatNativeDateModule,
-    MatDatepicker,
-    RouterOutlet,
-    MatInputModule,
-    MatDatepickerToggle,
-    MatDatepickerInput,
-    MatButton,
-    ReactiveFormsModule,
-    MatSidenavModule,
-    MatSelect,
-    MatOption,
-    MatTableModule,
-    MatProgressSpinner,
-    MatSort,
-    MatSortHeader,
-    MatPaginator,
-    MatIcon,
-    RouterModule,
-    QRCodeModule,
-    MatRadioGroup,
-    MatRadioButton
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        HttpClientModule,
+        FormsModule,
+        MatNativeDateModule,
+        MatDatepicker,
+        RouterOutlet,
+        MatInputModule,
+        MatDatepickerToggle,
+        MatDatepickerInput,
+        MatButton,
+        ReactiveFormsModule,
+        MatSidenavModule,
+        MatSelect,
+        MatOption,
+        MatTableModule,
+        MatProgressSpinner,
+        MatSort,
+        MatSortHeader,
+        MatPaginator,
+        MatIcon,
+        RouterModule,
+        QRCodeModule,
+        MatRadioGroup,
+        MatRadioButton,
+        ZXingScannerModule,
+         MatDialogModule,
 
-  ],
+    ],
   providers: [
     provideAnimationsAsync()
   ],

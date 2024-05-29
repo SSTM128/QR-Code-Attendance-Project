@@ -1,0 +1,14 @@
+add a confirmation Alert to excuse and warning Froms.
+
+add a feedback pop up to tell user forms have been successfully sent. (excuse / warning / updateStatus / scanQr)
+
+make sure the website is responsive for all sizes.
+
+add hover animation for buttons.
+
+try to make WarningForm accessable from the table (absent days column) on double-click: comment filled with the amount of absent days and the student_id field filled.
+
+adjust attendance table style make all the records light blue and on hover blue-300
+
+
+adjust qr generation timer should be a label.(said ward)

@@ -4,6 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { IUserCredentials } from '../../../../User.module';
 import { UserService } from '../../../../user.service';
 import { NotificationService } from '../../../../notification.service';
+import {MatDialog} from "@angular/material/dialog";
+import {FeedbackPopupComponent} from "../../../../Helpers/feedback-popup/feedback-popup.component";
 
 @Component({
   selector: 'app-warning-page',
@@ -23,12 +25,23 @@ export class WarningPageComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private userService: UserService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit() {
     this.user = this.userService.getUser();
     this.course_id = this.route.snapshot.paramMap.get('id') || '';
+
+    // Retrieve the query parameters
+    this.route.queryParams.subscribe(params => {
+      if (params['student_id'] && params['absent_days']) {
+        this.warningForm.patchValue({
+          id: params['student_id'],
+          comments: `The student has been absent for ${params['absent_days']} days.`
+        });
+      }
+    });
   }
 
   sendWarning() {
@@ -49,6 +62,9 @@ export class WarningPageComponent implements OnInit {
         response => {
           console.log('Notification created:', response);
           this.router.navigate([`lecturer-dashboard/course/${this.course_id}`]);
+          this.dialog.open(FeedbackPopupComponent, {
+            data: { message: 'Warning has been sent successfully!' }
+          });
         },
         error => {
           console.error('Error creating notification:', error);
